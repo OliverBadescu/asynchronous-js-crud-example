@@ -78,6 +78,26 @@ export async function createCar(car) {
     
 }
 
+export async function updateCar(car, carId){
+
+
+    try{
+
+
+        let response= await api(`add/${carId}`,"PUT",car);
+
+
+        let data= await response.json();
+
+        return data;
+
+   }catch(err){
+
+       return { success: false, message: "An error occurred while updating the car." };
+   }
+
+}
+
 function api(path, method = "GET", body = null) {
     const url = "http://localhost:8080/car/" + path;
     const options = {

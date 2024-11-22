@@ -1,4 +1,4 @@
-import { getAllCars,createCar,getCarById,deleteCarById } from "./service.js";
+import { getAllCars,createCar,getCarById,deleteCarById,updateCar } from "./service.js";
 
 
 
@@ -178,8 +178,8 @@ export function createUpdateDeletePage(car){
             <input name="make" type="text" id="make" value=${car.marca}>
         </p>
         <p>
-            <label for="author">Model</label>
-            <input name="author" type="text" id="author" value=${car.model}>
+            <label for="model">Model</label>
+            <input name="model" type="text" id="model" value=${car.model}>
         </p>
         <p>
             <label for="year">Year</label>
@@ -216,6 +216,31 @@ export function createUpdateDeletePage(car){
     let update = document.querySelector('#update-car');
 
 
+    update.addEventListener('click', () =>{
+
+        const make = document.querySelector('#make');
+        const model =document.querySelector('#model');
+        const year = document.querySelector('#year');
+        const km = document.querySelector('#km');
+        const price = document.querySelector('#price');
+        const used = document.querySelector('#used');
+
+        const carResponse = {
+
+            marca: make.value,
+            model: model.value,
+            year: year.value,
+            km: km.value,
+            price: price.value,
+            used: used.value
+        };
+
+        updateCar(carResponse, car.id);
+
+        alert("Car update sucessfully");
+        createHomePage();
+
+    });
 
 
     let deleteBtn = document.querySelector('#delete');
