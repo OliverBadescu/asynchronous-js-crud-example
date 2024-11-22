@@ -1,0 +1,127 @@
+body {
+    padding: 10px 50px 50px;
+    font: 18px "Garamond", serif;
+  }
+  
+  
+  p {
+    margin: 20px auto;
+  }
+  
+  ul {
+    padding: 0;
+    list-style-type: none;
+    margin-bottom: 10px;
+    line-height: 1.3em;
+  }
+  
+  h2 {
+    border-top: 2px solid #e7e7e7;
+    padding-top: 20px;
+  }
+  
+  th {
+    border-bottom: 2px solid #D8B493;
+    text-align: left;
+    padding: 5px 20px 5px 10px;
+  }
+  
+  tr {
+    min-height: 50px;
+  }
+  
+  tr:nth-child(2n) {
+    background: #E7E7E7;
+  }
+  
+  td {
+    padding: 5px 20px 5px 10px;
+  }
+  
+  label {
+    font-weight: bold;
+    min-width: 130px;
+    display: inline-block;
+    transition: 0.4s;
+    margin-bottom: 30px;
+  }
+  
+  input {
+    padding: 10px;
+    font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    border-radius: 2px;
+    border-color: #E7E7E7;
+    transition: 0.4s;
+  }
+  
+  
+  .error {
+    color: rgb(236, 15, 15);
+  }
+
+  .create-container{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+  }
+
+  .create-container p{
+    margin: 0;
+    font-weight: bolder;
+  }
+
+  .create-container input{
+    width:40%;
+  }
+
+  .create-container #used{
+    width: 150px;
+  }
+
+  .buttons-container{
+    margin-left: 135px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .buttons-container button, .add-car, .update-container button{
+    background-color: #019875;
+    color: white;
+    border: 0;
+    font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 10px 14px 12px;
+    font-size: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.5s;
+  }
+
+  #update-car{
+    width: 150px;
+  }
+
+  #delete{
+    width: 150px;
+  }
+  #submit{
+    width: 150px;
+  }
+  #cancel{
+    width: 80px;
+    font-weight: bolder;
+  }
+
+  #submit:hover, #cancel:hover, .add-car:hover, .update-container button:hover{
+    transform: scale(1.1);
+  }
+
+  a{
+    text-decoration: none;
+    color: #019875;
+    font-weight: bolder;
+  }
