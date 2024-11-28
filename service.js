@@ -84,8 +84,7 @@ export async function updateCar(car, carId){
     try{
 
 
-        let response= await api(`add/${carId}`,"PUT",car);
-
+        let response= await api(`update/${carId}`,"PUT",car);
 
         let data= await response.json();
 

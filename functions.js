@@ -4,7 +4,7 @@ import { getAllCars,createCar,getCarById,deleteCarById,updateCar } from "./servi
 
 
 export function createHomePage(){
-
+    loadCars();
     let container=document.querySelector(".container");
 
     container.innerHTML=`
@@ -34,7 +34,7 @@ export function createHomePage(){
     `
 
 
-    loadCars();
+    
 
 
     let btnAdd = document.querySelector('.add-car');
@@ -65,13 +65,13 @@ export function createHomePage(){
 
 }
 
-export function createAddCarPage(){
-
+export function createAddCarPage() {
     let container = document.querySelector(".container");
 
     container.innerHTML = `
     <h1>New Car</h1>
-    <div class = "create-container">
+    <div class="error-container"></div>
+    <div class="create-container">
         <p>
             <label for="make">Make</label>
             <input name="make" type="text" id="make">
@@ -100,69 +100,77 @@ export function createAddCarPage(){
             </select>
         </p>
 
-        <div class = "buttons-container">
-            <button id="submit">Create New Car</button>
+        <div class="buttons-container">
+            <button id="submit" disabled>Create New Car</button>
             <button id="cancel">Cancel</button>
         </div>
     </div>
+    `;
 
-    `
+    const inputs = {
+        make: document.querySelector('#make'),
+        model: document.querySelector('#model'),
+        year: document.querySelector('#year'),
+        km: document.querySelector('#km'),
+        price: document.querySelector('#price'),
+    };
 
-    let make = document.querySelector('#make');
-    let model = document.querySelector('#model');
-    let year = document.querySelector('#year');
-    let km = document.querySelector('#km');
-    let price = document.querySelector('#price');
-    let used = document.querySelector('#used');
+    const btnSubmit = document.querySelector('#submit');
+    const errorContainer = document.querySelector('.error-container');
+    const cancelBtn = document.querySelector('#cancel');
 
+    for (const key in inputs) {
+        inputs[key].addEventListener('input', () => {
+            updateErrors(inputs, errorContainer, btnSubmit);
+        });
+    }
 
-    let btnSubmit = document.querySelector('#submit');
-
-    let cancel = document.querySelector('#cancel');
-
-    btnSubmit.addEventListener('click', async() =>{
-
-        if(make.value === ''&& model.value === ''){
-                attachErrorMessage();
-            }
-
-        const car={
-            marca: make.value,
-            model: model.value,
-            an: year.value,
-            km: km.value,
-            pret: price.value,
-            uzata: used.value === "true",
+    btnSubmit.addEventListener('click', async () => {
+        const car = {
+            marca: inputs.make.value,
+            model: inputs.model.value,
+            an: inputs.year.value,
+            km: inputs.km.value,
+            pret: inputs.price.value,
+            uzata: document.querySelector('#used').value === "true",
         };
 
-
-
         const result = await createCar(car);
-
         if (result.success) {
             alert("Car created successfully!");
-            removeErrorMessage();
-            make.value = '';
-            model.value = '';
-            year.value = '';
-            km.value = '';
-            price.value = '';
-            used.value= '';
+            createHomePage();
         } else {
-            alert(`Failed to create car, car with this make and model already exists`);
+            alert("Failed to create car. A car with this make and model already exists.");
         }
-        
     });
 
+    cancelBtn.addEventListener('click', createHomePage);
 
-    cancel.addEventListener('click', () =>{
-
-        createHomePage();
-    });
-
-
-
+    updateErrors(inputs, errorContainer, btnSubmit);
 }
+
+function updateErrors(inputs, errorContainer, btnSubmit) {
+    const errors = validateInputs(inputs);
+    renderErrors(errors, errorContainer);
+    btnSubmit.disabled = errors.length > 0;
+}
+
+function validateInputs(inputs) {
+    const errors = [];
+    if (inputs.make.value.trim() === '') errors.push('Make is invalid');
+    if (inputs.model.value.trim() === '') errors.push('Model is invalid');
+    if (inputs.year.value <= 0) errors.push('Year is invalid');
+    if (inputs.km.value <= 0) errors.push('Km is invalid');
+    if (inputs.price.value <= 0) errors.push('Price is invalid');
+    return errors;
+}
+
+function renderErrors(errors, errorContainer) {
+    errorContainer.innerHTML = errors
+        .map((err) => `<p class="error-message">${err}</p>`)
+        .join('');
+}
+
 
 export function createUpdateDeletePage(car){
 
@@ -229,13 +237,15 @@ export function createUpdateDeletePage(car){
 
             marca: make.value,
             model: model.value,
-            year: year.value,
-            km: km.value,
-            price: price.value,
-            used: used.value
+            km: km.value, 
+            uzata: used.value,
+            pret: price.value,
+            an: year.value
         };
 
         updateCar(carResponse, car.id);
+
+        console.log(carResponse);
 
         alert("Car update sucessfully");
         createHomePage();
@@ -248,44 +258,12 @@ export function createUpdateDeletePage(car){
     deleteBtn.addEventListener('click', () =>{
 
         deleteCarById(car.id);
+        alert("Car deleted succesfully!");
         createHomePage();
     })
 
 }
 
-function createErrorMessage(){
-
-    const message = document.createElement("div");
-    message.classList.add("error-message");
-
-    message.innerHTML = `
-    
-    <h2 class="error">Oooops!</h2>
-        <ul class="error">
-            <li>Make is required</li>
-            <li>Model is required</li>
-        </ul>
-    `
-
-    return message;
-
-}
-
-function attachErrorMessage(){
-    let createBody = document.querySelector(".create-container");
-    let firstElem= createBody.firstElementChild;
-
-    createBody.insertBefore(createErrorMessage(),firstElem);
-}
-
-function removeErrorMessage(){
-    let createBody = document.querySelector(".create-container");
-    let errorMessage = createBody.querySelector(".error-message"); 
-
-    if (errorMessage) {
-        createBody.removeChild(errorMessage); 
-    }
-}
 
 function createCard(car) {
     const tr = document.createElement("tr");
@@ -332,3 +310,33 @@ async function loadCars(){
     
 }
 
+function isValid(){
+    let err=[];
+
+    let make = document.querySelector('#make');
+    let model = document.querySelector('#model');
+    let year = document.querySelector('#year');
+    let km = document.querySelector('#km');
+    let price = document.querySelector('#price');
+
+
+if( make.value === ''){
+    err.push("Make invalid");
+} 
+if(model.value ===''){
+    err.push("Model invalid");
+}
+if(year.value <= 0){
+    err.push("Year invalid");
+}
+if(km.value <0){
+    err.push("Km invalid");
+}
+if(price.value <= 0){
+    err.push("Price invalid");
+}
+
+return err;
+    
+
+}
