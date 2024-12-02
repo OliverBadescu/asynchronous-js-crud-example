@@ -149,27 +149,6 @@ export function createAddCarPage() {
     updateErrors(inputs, errorContainer, btnSubmit);
 }
 
-function updateErrors(inputs, errorContainer, btnSubmit) {
-    const errors = validateInputs(inputs);
-    renderErrors(errors, errorContainer);
-    btnSubmit.disabled = errors.length > 0;
-}
-
-function validateInputs(inputs) {
-    const errors = [];
-    if (inputs.make.value.trim() === '') errors.push('Make is invalid');
-    if (inputs.model.value.trim() === '') errors.push('Model is invalid');
-    if (inputs.year.value <= 0) errors.push('Year is invalid');
-    if (inputs.km.value <= 0) errors.push('Km is invalid');
-    if (inputs.price.value <= 0) errors.push('Price is invalid');
-    return errors;
-}
-
-function renderErrors(errors, errorContainer) {
-    errorContainer.innerHTML = errors
-        .map((err) => `<p class="error-message">${err}</p>`)
-        .join('');
-}
 
 
 export function createUpdateDeletePage(car){
@@ -310,33 +289,25 @@ async function loadCars(){
     
 }
 
-function isValid(){
-    let err=[];
 
-    let make = document.querySelector('#make');
-    let model = document.querySelector('#model');
-    let year = document.querySelector('#year');
-    let km = document.querySelector('#km');
-    let price = document.querySelector('#price');
-
-
-if( make.value === ''){
-    err.push("Make invalid");
-} 
-if(model.value ===''){
-    err.push("Model invalid");
-}
-if(year.value <= 0){
-    err.push("Year invalid");
-}
-if(km.value <0){
-    err.push("Km invalid");
-}
-if(price.value <= 0){
-    err.push("Price invalid");
+function updateErrors(inputs, errorContainer, btnSubmit) {
+    const errors = validateInputs(inputs);
+    addErrors(errors, errorContainer);
+    btnSubmit.disabled = errors.length > 0;
 }
 
-return err;
-    
+function validateInputs(inputs) {
+    const errors = [];
+    if (inputs.make.value.trim() === '') errors.push('Make is invalid');
+    if (inputs.model.value.trim() === '') errors.push('Model is invalid');
+    if (inputs.year.value <= 0) errors.push('Year is invalid');
+    if (inputs.km.value <= 0) errors.push('Km is invalid');
+    if (inputs.price.value <= 0) errors.push('Price is invalid');
+    return errors;
+}
 
+function addErrors(errors, errorContainer) {
+    errorContainer.innerHTML = errors
+        .map((err) => `<p class="error-message">${err}</p>`)
+        .join('');
 }
